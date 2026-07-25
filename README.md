@@ -9,17 +9,17 @@ This project is a serverless system that allows someone to create a user through
 
 ## Prequesitis
 
-If you want to follow along with this project walkthrough you will need to have the following
+If you want to follow along with this project walkthrough you will need to have the following:
 
 - An AWS Account with an IAM user (do not use the root account) - [Create An Account Here](https://aws.amazon.com/free/?trk=ce1f55b8-6da8-4aa2-af36-3f11e9a449ae&sc_channel=ps&ef_id=Cj0KCQjw782_BhDjARIsABTv_JCWZitQyH0tU_lYElDDQ9HdBabDxB-tKSgYDsRiU0N_XqiVVpjvBTUaAmR7EALw_wcB:G:s&s_kwcid=AL!4422!3!433803621002!e!!g!!aws%20sign%20up!9762827897!98496538743&gclid=Cj0KCQjw782_BhDjARIsABTv_JCWZitQyH0tU_lYElDDQ9HdBabDxB-tKSgYDsRiU0N_XqiVVpjvBTUaAmR7EALw_wcB&all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=*all&awsf.Free%20Tier%20Categories=*all)
 
-- Terraform - 
+- Terraform - [Install Here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-- Docker -
+- Docker - [Install Here](https://docs.docker.com/desktop/)
 
-- LocalStack CLI -
+- LocalStack CLI - [Install Here](https://docs.localstack.cloud/aws/developer-tools/running-localstack/localstack-cli/)
 
-- Terraform-local -
+- Terraform-local - [Install Here](https://github.com/localstack/terraform-local)
 
 ## Directory Structure of Project
 
