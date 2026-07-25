@@ -147,8 +147,6 @@ You can also deploy to both dev and prod through GitHub Actions (though you will
 
 If you are going to deploy it this way, be sure to set up a GitHub environment called `prod` in settings under Environments, and add a protection rule so that any workflow job referencing this environment needs a deployment gate that must be reviewed and approved by someone. This deployment gate is applied to both the `apply` and `destroy` workflow jobs:
 
-![GitHub environment settings](images/settings.png)
-
 ![GitHub environments list](images/envs.png)
 
 ![Apply deployment gate](images/apply-gate.png)
