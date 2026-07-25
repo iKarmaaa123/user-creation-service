@@ -4,6 +4,9 @@
 
 This project is a serverless system that allows someone to create a user through a create-user api, which is processed and stroed in an S3 bucket to be viewed by a developer. This README outlines step-by-step on how you can get the infrastucture deployed to both `LocalStack` and `AWS`, and go through the whole serverless stack that was used to build this.
 
+## Architectural Diagram
+
+
 ## Prequesitis
 
 If you want to follow along with this project walkthrough you will need to have the following
@@ -146,4 +149,76 @@ All resources should successfully be deployed to AWS:
 
 ![alt text](terraform-apply.png)
 
-You can also deploy to both dev and prod through GitHub Actions (though you won't be able to access LocalStack through GitHub Actions) through manually running the workflows or making file changes to the Terraform files. If you are going to deploy it through this way, be sure to set up a GitHub environment called `prod` in settings, Environments and and a protection rule where any workflow job referencing this enviornment needs to have a deployment gate that needs to be reviewed and approved by someone - this deployment gate is applied to both the `apply` and `destroy` workflow jobs.
+You can also deploy to both dev and prod through GitHub Actions (though you won't be able to access LocalStack through GitHub Actions) through manually running the workflows or making file changes to the Terraform files. 
+
+If you are going to deploy it through this way, be sure to set up a GitHub environment called `prod` in settings, Environments and and a protection rule where any workflow job referencing this enviornment needs to have a deployment gate that needs to be reviewed and approved by someone - this deployment gate is applied to both the `apply` and `destroy` workflow jobs:
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+![alt text](image-5.png)
+
+![alt text](image-4.png)
+
+## The Event flow
+
+Before we go into running this event-driven process, it is important to understand the whole end-to-end event flow from the moment a user is created to an s3 object being created:
+
+- User will send a POST http method request with /create-user to to an API being managed behind an API Gateway.
+
+- The API Gateway will then trigger a Lambda with an event which we extract specific parts like the user that was created which then gets written to a DynamoDB table.
+
+- Once the lambda write the user to the DynamoDB table, this then emits an event that goes to eventbridge pipes that transforms it into an eventbridge event and then sends it to AWS EventBridge.
+
+- The event then hits an event bus matching a rule that then triggers another Lambda function which then puts the event in an S3 Bucket.
+
+## How to trigger event-driven process
+
+Up to this point, you should now have all the necessary infrastrucutre deployed to start getting this entire event-driven flow working end-to-end. Because we are sending POST api requests, you will need to use either curl or Postman for this. In this guide, I will be using Postman. Also note that if you do not have a LocalStack subscription, you won't be able to deploy the eventbridge pipe, which is was you need to be able to forward events from DynamoDB to EventBridge.
+
+So if you are running this in LocalStack, it is going to be a bit different in that you don't actually have the invoke url available to see in API Gateway. Make sure to found out what your Api gateway id is and also enter your own user.
+
+`http://<your apiId>.execute-api.localhost.localstack.cloud:4566/dev/create-user?user=<you user>`
+
+If you are using AWS, simply go to API Gateway and select `stages`. You should see your invoke url:
+
+![alt text](image-6.png)
+
+Go ahead and post the invoke url in Postman. Once you have done that, you should be prompted with the following message:
+
+![alt text](image-7.png)
+
+Once you have seen that successful message, you should see your user in the DynamoDB table:
+
+![alt text](image-8.png)
+
+If you go to S3, you will see an object get generated inside of the `user-data-serverless-project`. This s3 bucket object will contain event data for your user that you created:
+
+![alt text](image-9.png)
+
+![alt text](image-10.png)
+
+## Design decisions
+
+Eventbridge pipes was used in between DynamoDB and eventbridge, so that the raw event that comes from DynamoDB streams can transformed allowing use to shrink the event to only contain fields that we are interested in as opposed to doing this on the Eventbridge level. 
+
+This makes it so that events that EventBridge receives have already been transformed and doesn't require adding in any transformation logic on the eventbridge to transform the event before routing them to consumers as this ideally is something that should be done on the producer side. 
+
+Using pipes also provides with the opprtunity to also add in fields of our own - in this case I added a source and detail-type field, so that the DynamoDB event matches the event pattern in our event bus rule.
+
+On the S3 Lambda, because event routing is happening asyncrhously, it was important to be able to capture failed processed events which I used a dead letter queue for. The dead letter queue is not associated with a source queue, and instead when failed lambda invocations happen after a certain number retries, these failed events get send to the dead letter queue. However, because we are using a single DLQ setup, this makes replying events difficult as I would need to setup another Lambda function to do this.
+
+## Troubleshooting notes
+
+- If you are running into issues with the Lambda Functions check the cloudwatch logs for both of them, or the DLQ for the S3 Lambda function.
+
+- If you are receiving a 400 status code from api this will be due to not passing in the correct path parameter (which is `user`), you did not pass in any path parameters at all or you passed in the wrong path in the url.
+
+- If you run into permissions issues when deploying this via GitHub Actions, make sure your OIDC role that your runner is assuming has the correct permissions. Also make sure that you have an OIDC role created for your runner to asusme.
+
+- If you are using LocalStack and can't deploy the EventBridge pipe, this will be due to not having a LocalStack ultimate subscription. If you do not want to pay for thiis, simply stick to just using AWS.
+
+## Cleaning up
+
+Once you are finished, go ahead and approve the terraform destroy gate to destroy the infrastructure. For LocalStack just run the `localstack stop` command.
