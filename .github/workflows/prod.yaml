@@ -90,7 +90,6 @@ jobs:
           framework: terraform
           quiet: true
           soft_fail: true
-          format: table
         
       - name: Terraform Plan
         run: terraform plan -var-file=prod.tfvars
