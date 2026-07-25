@@ -6,7 +6,7 @@ This project is a serverless system that allows someone to create a user through
 
 ## Architectural Diagram
 
-[Architectural Diagram](./images/serverless-project.drawio.png)
+![Architectural Diagram](./images/serverless-project.drawio.png)
 
 ## Prequesitis
 
