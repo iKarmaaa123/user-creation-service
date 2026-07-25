@@ -27,3 +27,13 @@ variable "attribute_key_type" {
   type        = string
   description = "The data type of attribute key"
 }
+
+variable "stream_view_type" {
+  type        = string
+  description = "Determines what is written to table stream when item has been modified"
+}
+
+variable "deletion_protection_enabled" {
+  type        = bool
+  description = "Whether to enable delete protection on DynamoDB table"
+}

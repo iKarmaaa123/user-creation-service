@@ -51,13 +51,15 @@ module "lambda" {
 }
 
 module "dynamodb" {
-  source              = "../../modules/dynamodb"
-  dynamodb_table_name = var.dynamodb_table_name
-  billing_mode        = var.billing_mode
-  hash_key            = var.hash_key
-  stream_enabled      = var.stream_enabled
-  attribute_key_type  = var.attribute_key_type
-  attribute_name      = var.attribute_name
+  source                      = "../../modules/dynamodb"
+  dynamodb_table_name         = var.dynamodb_table_name
+  billing_mode                = var.billing_mode
+  hash_key                    = var.hash_key
+  stream_enabled              = var.stream_enabled
+  attribute_key_type          = var.attribute_key_type
+  attribute_name              = var.attribute_name
+  stream_view_type            = var.stream_view_type
+  deletion_protection_enabled = var.deletion_protection_enabled
 }
 
 module "sqs" {

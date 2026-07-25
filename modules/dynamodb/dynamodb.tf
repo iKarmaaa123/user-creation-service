@@ -3,7 +3,7 @@ resource "aws_dynamodb_table" "my_aws_dynamodb_table" {
   hash_key                    = var.hash_key
   billing_mode                = var.billing_mode
   stream_enabled              = var.stream_enabled
-  stream_view_type            = "NEW_AND_OLD_IMAGES"
+  stream_view_type            = var.stream_view_type
   deletion_protection_enabled = false
 
   attribute {
