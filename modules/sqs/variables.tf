@@ -22,3 +22,8 @@ variable "receive_wait_time_seconds" {
   type        = number
   description = "Number of seconds to wait before application can consume messages from queue"
 }
+
+variable "visibility_timeout_seconds" {
+  type = number
+  description = "The number of seconds for visibility timeout"
+}

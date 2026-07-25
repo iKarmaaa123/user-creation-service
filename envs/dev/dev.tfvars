@@ -32,6 +32,7 @@ max_message_size                                    = 2048
 message_retention_seconds                           = 86400
 receive_wait_time_seconds                           = 10
 max_receive_count                                   = 4
+visibility_timeout_seconds                          = 10
 event_bus_name                                      = "user-data-forwarder"
 event_bus_description                               = "Event bus for routing events based on dynamodb table writes"
 event_bus_rule_name                                 = "dynamodb-write-events"

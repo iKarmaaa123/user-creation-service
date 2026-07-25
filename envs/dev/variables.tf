@@ -208,6 +208,11 @@ variable "max_receive_count" {
   description = "Number of messages to replay back to source queue"
 }
 
+variable "visibility_timeout_seconds" {
+  type = number
+  description = "The number of seconds for visibility timeout"
+}
+
 variable "event_bus_name" {
   type        = string
   description = "Name of event bus"

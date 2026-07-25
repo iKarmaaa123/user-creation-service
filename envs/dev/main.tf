@@ -69,6 +69,7 @@ module "sqs" {
   message_retention_seconds       = var.message_retention_seconds
   delay_seconds                   = var.delay_seconds
   s3_lambda_deadletter_queue_name = var.s3_lambda_deadletter_queue_name
+  visibility_timeout_seconds      = var.visibility_timeout_seconds
 }
 
 module "eventbridge" {
