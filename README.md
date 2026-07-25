@@ -213,4 +213,4 @@ On the S3 Lambda, because event routing is happening asynchronously, it was impo
 
 ## Cleaning up
 
-Once you are finished, go ahead and approve the Terraform destroy gate to destroy the infrastructure. For LocalStack, just run the `tflocal destroy -var-file=dev.tfvars` command.
+Once you are finished, go ahead and approve the `Terraform destroy` gate in the `prod` workflow to destroy the infrastructure. For LocalStack, just run the `tflocal destroy -var-file=dev.tfvars` command.
