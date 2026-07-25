@@ -6,6 +6,7 @@ This project is a serverless system that allows someone to create a user through
 
 ## Architectural Diagram
 
+[Architectural Diagram](./images/serverless-project.drawio.png)
 
 ## Prequesitis
 
@@ -16,8 +17,6 @@ If you want to follow along with this project walkthrough you will need to have 
 - Terraform - [Install Here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
 - Docker - [Install Here](https://docs.docker.com/desktop/)
-
-- LocalStack CLI - [Install Here](https://docs.localstack.cloud/aws/developer-tools/running-localstack/localstack-cli/)
 
 - Terraform-local - [Install Here](https://github.com/localstack/terraform-local)
 
@@ -90,19 +89,15 @@ If you want to follow along with this project walkthrough you will need to have 
 
 ## How to run LocalStack
 
-To run LocalStack, make sure you have Docker installed because the CLI pulls a docker image and starts a container that will run the LocalStack application. To start LocalStack, run the following command in a new terminal or with `-d` option to run it in detached mode:
+To run LocalStack, go ahead and run the following command:
 
 ```shell
-localstack start
+docker compose up
 ```
 
-When you have ran that command, if it was successful, you should see the following in your terminal:
+When you have ran that command, access LocalStack through this endpoint `https://app.localstack.cloud/inst/default/resources`. You should be directed to this page:
 
-![alt text](localstack.png)
-
-Click on the endpoint that you see, and you will taken to this page:
-
-![alt text](image.png)
+![LocalStack dashboard](images/localstack.png)
 
 You now have LocalStack set up.
 
@@ -125,7 +120,6 @@ tflocal plan -var-file=dev.tfvars
 ```shell
 tflocal apply -var-file=prod.tfvars
 ```
- If you would like to delete your resources, either run tflocal destroy or run the localstack stop command.
 
  Now we will look at how to deploy to Prod. Go ahead and run the following commands:
 
@@ -147,19 +141,19 @@ terraform apply -var-file=prod.tfvars
 
 All resources should successfully be deployed to AWS:
 
-![alt text](terraform-apply.png)
+![Terraform apply success](images/apply.png)
 
 You can also deploy to both dev and prod through GitHub Actions (though you won't be able to access LocalStack through GitHub Actions) through manually running the workflows or making file changes to the Terraform files. 
 
 If you are going to deploy it through this way, be sure to set up a GitHub environment called `prod` in settings, Environments and and a protection rule where any workflow job referencing this enviornment needs to have a deployment gate that needs to be reviewed and approved by someone - this deployment gate is applied to both the `apply` and `destroy` workflow jobs:
 
-![alt text](image-2.png)
+![GitHub environment settings](images/settings.png)
 
-![alt text](image-3.png)
+![GitHub environments list](images/envs.png)
 
-![alt text](image-5.png)
+![Apply deployment gate](images/apply-gate.png)
 
-![alt text](image-4.png)
+![Destroy deployment gate](images/destroy-gate.png)
 
 ## The Event flow
 
@@ -183,21 +177,21 @@ So if you are running this in LocalStack, it is going to be a bit different in t
 
 If you are using AWS, simply go to API Gateway and select `stages`. You should see your invoke url:
 
-![alt text](image-6.png)
+![API Gateway stages](images/stages.png)
 
 Go ahead and post the invoke url in Postman. Once you have done that, you should be prompted with the following message:
 
-![alt text](image-7.png)
+![Successful Postman response](images/postman.png)
 
 Once you have seen that successful message, you should see your user in the DynamoDB table:
 
-![alt text](image-8.png)
+![DynamoDB item](images/dynamodb.png)
 
 If you go to S3, you will see an object get generated inside of the `user-data-serverless-project`. This s3 bucket object will contain event data for your user that you created:
 
-![alt text](image-9.png)
+![S3 bucket](images/s3.png)
 
-![alt text](image-10.png)
+![S3 object data](images/object.png)
 
 ## Design decisions
 
@@ -221,4 +215,4 @@ On the S3 Lambda, because event routing is happening asyncrhously, it was import
 
 ## Cleaning up
 
-Once you are finished, go ahead and approve the terraform destroy gate to destroy the infrastructure. For LocalStack just run the `localstack stop` command.
+Once you are finished, go ahead and approve the terraform destroy gate to destroy the infrastructure. For LocalStack just run the `tflocal destroy -var-file=dev.tfvars` command.
