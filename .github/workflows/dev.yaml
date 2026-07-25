@@ -8,6 +8,10 @@ on:
 
   workflow_dispatch:
 
+env:
+  TERRAFORM_VERSION: "1.15.8"
+  PYTHON_VERSION: "3.14"
+
 defaults:
   run:
     working-directory: ./envs/dev
@@ -24,7 +28,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
-        python-version: "3.14"
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python dependencies
       run: pip install -r requirements.txt
@@ -53,7 +57,7 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v4
       with:
-        terraform_version: "1.15.8"
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
 
     - name: Set up tflocal
       run: pip install terraform-local
@@ -66,4 +70,4 @@ jobs:
 
     - name: Running tflocal apply
       run: tflocal apply -var-file=dev.tfvars -auto-approve
-      continue-on-error: true
+      continue-on-error: true # This is allow the workflow to still succeed, and not fail due to not having a LocalStack subscription to deploy an eventbridge pipe
