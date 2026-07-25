@@ -24,6 +24,6 @@ variable "receive_wait_time_seconds" {
 }
 
 variable "visibility_timeout_seconds" {
-  type = number
+  type        = number
   description = "The number of seconds for visibility timeout"
 }

@@ -214,7 +214,7 @@ variable "max_receive_count" {
 }
 
 variable "visibility_timeout_seconds" {
-  type = number
+  type        = number
   description = "The number of seconds for visibility timeout"
 }
 
