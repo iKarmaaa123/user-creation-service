@@ -92,7 +92,7 @@ If you want to follow along with this project walkthrough, you will need the fol
 To run LocalStack, go ahead and run the following command:
 
 ```shell
-docker compose up
+docker compose up -d
 ```
 
 Once you have run that command, access LocalStack through this endpoint: `https://app.localstack.cloud/inst/default/resources`. You should be directed to this page:
@@ -213,4 +213,4 @@ On the S3 Lambda, because event routing is happening asynchronously, it was impo
 
 ## Cleaning up
 
-Once you are finished, go ahead and approve the `Terraform destroy` gate in the `prod` workflow to destroy the infrastructure. For LocalStack, just run the `tflocal destroy -var-file=dev.tfvars` command.
+Once you are finished, go ahead and approve the `Terraform destroy` gate in the `prod` workflow to destroy the infrastructure in AWS. For LocalStack, just run the `docker compose down` command to stop the running LocalStack container and then delete the container as well as the container image you pulled.
