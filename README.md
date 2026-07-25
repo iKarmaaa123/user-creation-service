@@ -16,9 +16,9 @@ If you want to follow along with this project walkthrough, you will need the fol
 
 - Terraform - [Install Here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-- Docker - [Install Here](https://docs.docker.com/desktop/)
-
 - Terraform-local - [Install Here](https://github.com/localstack/terraform-local)
+
+- Docker - [Install Here](https://docs.docker.com/desktop/)
 
 ## Directory Structure of Project
 
@@ -128,7 +128,7 @@ cd envs/prod
 ```
 
 ```shell
-terraform init (make sure you have the bucket created with the exact name in backend.tf)
+terraform init
 ```
 
 ```shell
