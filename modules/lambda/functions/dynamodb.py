@@ -23,7 +23,7 @@ def _validate_request(path: str, query_string: Dict[str, str], user: str):
     return {"statusCode": 200}
         
 
-def _sending_to_dynamodb(user, table_name):
+def _sending_to_dynamodb(user: str, table_name: str):
     try:
         dynamodb_client.put_item(
             TableName=table_name,
